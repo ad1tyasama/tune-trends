@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="https://dishapatel010.github.io/T.png">
+    <title>Tune Trends</title>
+    <style>
+        /* Import external font */
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
+
+        /* Set default background color and font-family for the page */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fff;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s ease;
+            margin: 0;
+            padding: 0;
+        }
+
+        .heading::after {
+            content: "";
+            display: block;
+            width: 150px; /* Adjust the width of the line as needed */
+            height: 2px; /* Adjust the height or thickness of the line as needed */
+            background-color: #1db954; /* Color of the line */
+            margin: 10px auto; /* Adjust the margin to control the distance between the heading and the line */
+        }
+
+        .heading {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #1db954;
+        }
+
+        /* Style the introduction text */
+        .intro-text {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* Style the card container */
+        .anime-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+        }
+
+        /* Style the card */
+        .card {
+            width: 200px;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            margin: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: transform 0.2s ease;
+            background-size: cover;
+            background-position: center;
+            border-radius: 25px;
+            height: 250px;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: scale(1.1); /* Enlarge the card by 5% on hover */
+        }
+
+        .card::after {
+            position: absolute;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.8); /* Background color of the overlay */
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            opacity: 0; /* Initially hide the overlay */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Show the overlay on card hover */
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .small-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%; /* Rounded profile images */
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Style card text */
+        .card-title {
+            font-size: 24px;
+
+            margin-top: 10px;
+        }
+
+        .card-text {
+            font-size: 16px;
+            margin-top: 10px;
+
+        }
+
+        /* Style the button */
+        .button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: gray; /* Darker green on hover */
+        }
+
+        .dark-theme {
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .sun-icon, .moon-icon {
+            font-size: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .light-theme .sun-icon, .dark-theme .moon-icon {
+            display: none;
+        }
+
+        .light-theme .moon-icon, .dark-theme .sun-icon {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="sun-icon">&#x1f31e;</span>
+        <span class="moon-icon">&#x1f319;</span>
+    </div>
+    <!-- Heading and introduction text -->
+    <h1 class="heading">Tune Trends</h1>
+    <p class="intro-text">Click on the "Authorize" to start exploring the analysis.</p>
+
+    <!-- Card container -->
+    <div class="anime-list">
+        <a href="{{ auth_url }}" class="card" style="background-image: url('https://graph.org/file/fb213499003ba1914344a.png');">
+            <button class="button">AUTHORIZE</button>
+        </a>
+    </div>
+
+    <script>
+        // (theme toggle script) ...
+    </script><script>
+        function toggleTheme() {
+            const body = document.querySelector('body');
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+
+            // Store theme preference in local storage
+            const theme = body.classList.contains('light-theme') ? 'light-theme' : 'dark-theme';
+            localStorage.setItem('theme', theme);
+
+            // Set a data attribute on the body to track the current theme
+            body.setAttribute('data-theme', theme);
+        }
+
+        // Set initial theme based on stored value
+        const storedTheme = localStorage.getItem('theme');
+        const body = document.querySelector('body');
+
+        if (storedTheme) {
+            // If there is a stored theme in local storage, use that as the initial theme
+            body.classList.add(storedTheme);
+            body.setAttribute('data-theme', storedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // If no stored theme and user prefers dark mode, set dark theme as default
+            body.classList.add('dark-theme');
+            body.setAttribute('data-theme', 'dark-theme');
+        } else {
+            // Otherwise, set light theme as default
+            body.classList.add('light-theme');
+            body.setAttribute('data-theme', 'light-theme');
+        }
+    </script>
+</body>
+</html>

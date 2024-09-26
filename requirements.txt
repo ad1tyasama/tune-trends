@@ -1,0 +1,10 @@
+Flask
+pandas
+numpy
+plotly
+scikit-learn
+spotipy
+Flask-Login
+Flask-Session
+Flask-Bcrypt
+requests

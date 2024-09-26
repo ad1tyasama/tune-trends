@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tune Trends</title>
+<link rel="shortcut icon" type="image/x-icon" href="https://dishapatel010.github.io/T.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    
+    <!-- Your CSS styles here -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700,900&display=swap');
+
+        :root {
+            --gradient: linear-gradient(135deg, #72EDF2 10%, #5151E5 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            line-height: 1.25em;
+        }
+
+        body {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            transition: background-color 0.3s ease;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container1, .container2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: transparent;
+    color: #fff;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 20px;
+    margin: 20px;
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+@media (max-width: 768px) {
+    .container1, .container2 {
+        width: 100%;
+    }
+}
+
+
+        .navbar {
+            padding: 10px;
+            height: 100px;
+            width: 100%;
+        }
+
+        .navbar-brand .navbar-text {
+            font-size: 40px;
+            font-weight: bold;
+            margin-left: 10px;
+            color: #1db954;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-left: 10px;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .sun-icon, .moon-icon {
+            font-size: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .light-theme .sun-icon, .dark-theme .moon-icon {
+            display: none;
+        }
+
+        .light-theme .moon-icon, .dark-theme .sun-icon {
+            display: inline-block;
+        }
+
+        .weather-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 20px;
+        }
+
+        .weather-container {
+            margin-top: 10px;
+        }
+
+        .date-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .info-side {
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .week-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            
+            border-radius: 50px;
+            background-color: #1e1e1e;
+            margin: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .cardimage {
+            border-radius: 50px;
+            margin: 10px 0;
+        }
+
+        .button {
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dark-theme {
+            background-color: #1e1e1e;
+            color: white;
+        }
+    /* Add this CSS at the end of your existing styles */
+    .loading-indicator {
+        display: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+    }
+        @media (max-width: 768px) {
+            .container1, .container2 {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand">
+                <span class="navbar-text">Tune Trends</span>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="upload">Youtube</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <span class="sun-icon">&#x1f31e;</span>
+            <span class="moon-icon">&#x1f319;</span>
+        </div>
+    </nav>
+
+<div class="container1">
+    <div class="weather-side">
+        <div class="date-container">
+            {% if user_profile_picture is not none %}
+                <img src="{{ user_profile_picture }}" alt="{{ display_name }}'s profile picture" width="100px" style="border-radius: 50%;">
+            {% endif %}
+            <h1>{{ display_name }}</h1>
+        </div>
+        <div class="weather-container">
+            <p>Email: {{ email }}</p>
+            <p>Followers: {{ followers }}</p>
+            <p>Country: {{ country }}</p>
+        </div>
+    </div>
+</div>
+<div class="container2">
+    <div class="info-side">
+        <div class="week-container">
+            <div class="card">
+                <div class="card-content">
+                    <img src="https://graph.org/file/4429e31ca3c2eb99dad0f.png" class="cardimage" height="80px" width="80px">
+                    <a href="{{ url_for('current_song') }}">
+                        <button class="button" id="button-current-song" onclick="showLoadingIndicator('button-current-song', 'loading-indicator-current-song')">Now Playing</button>
+                        <div id="loading-indicator-current-song" class="loading-indicator">Loading...</div>
+                    </a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <img src="https://graph.org/file/b9411cfdfb6d0fa516aee.png" class="cardimage" height="80px" width="80px">
+                    <a href="{{ url_for('tdr') }}">
+                        <button class="button" id="button-tdr" onclick="showLoadingIndicator('button-tdr', 'loading-indicator-tdr')">Time Analysis</button>
+                        <div id="loading-indicator-tdr" class="loading-indicator">Loading...</div>
+                    </a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <img src="https://graph.org/file/60b04095f13b6ba4c2e2f.png" class="cardimage" height="80px" width="80px">
+                    <a href="{{ url_for('pg') }}">
+                        <button class="button" id="button-pg" onclick="showLoadingIndicator('button-pg', 'loading-indicator-pg')">Playlist Analysis</button>
+                        <div id="loading-indicator-pg" class="loading-indicator">Loading...</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="week-container">
+            <div class="card">
+                <div class="card-content">
+                    <img src="https://graph.org/file/95d1dfc651f754ee3ca3c.png" class="cardimage" height="80px" width="80px">
+                    <a href="{{ url_for('spowrptrc') }}">
+                        <button class="button" id="button-spowrptrc" onclick="showLoadingIndicator('button-spowrptrc', 'loading-indicator-spowrptrc')">Top Tracks</button>
+                        <div id="loading-indicator-spowrptrc" class="loading-indicator">Loading...</div>
+                    </a>
+                </div>
+            </div>
+            <div class="card">
+                <div class card-content="">
+                    <img src="https://graph.org/file/95d1dfc651f754ee3ca3c.png" class="cardimage" height="80px" width="80px">
+                    <a href="{{ url_for('spowrpart') }}">
+                        <button class="button" id="button-spowrpart" onclick="showLoadingIndicator('button-spowrpart', 'loading-indicator-spowrpart')">Top Artists</button>
+                        <div id="loading-indicator-spowrpart" class="loading-indicator">Loading...</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="week-container">
+            <div class="card">
+                <div class="card-content">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2471/2471868.png" class="cardimage" height="80px" width="80px">
+                    <a href="{{ url_for('newx') }}" id="button-newx">
+                        <button class="button" id="button-newx" onclick="showLoadingIndicator('button-newx', 'loading-indicator-newx')">Advance Analysis</button>
+                        <div id="loading-indicator-newx" class="loading-indicator">Loading...</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+<script>
+    function showLoadingIndicator(buttonId, indicatorId) {
+            const button = document.getElementById(buttonId);
+            const indicator = document.getElementById(indicatorId);
+
+            // Disable the button
+            button.disabled = true;
+
+            // Show the loading indicator when the button is clicked
+            indicator.style.display = 'block';
+
+            // Navigate to Page B once the loading indicator is shown
+            window.location.href = button.getAttribute('href'); // Replace with the actual URL for Page B
+        }
+    function toggleTheme() {
+            const body = document.querySelector('body');
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+
+            // Store theme preference in local storage
+            const theme = body.classList.contains('light-theme') ? 'light-theme' : 'dark-theme';
+            localStorage.setItem('theme', theme);
+
+            // Set a data attribute on the body to track the current theme
+            body.setAttribute('data-theme', theme);
+        }
+
+        // Set initial theme based on stored value
+        const storedTheme = localStorage.getItem('theme');
+        const body = document.querySelector('body');
+
+        if (storedTheme) {
+            // If there is a stored theme in local storage, use that as the initial theme
+            body.classList.add(storedTheme);
+            body.setAttribute('data-theme', storedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // If no stored theme and user prefers dark mode, set dark theme as default
+            body.classList.add('dark-theme');
+            body.setAttribute('data-theme', 'dark-theme');
+        } else {
+            // Otherwise, set light theme as default
+            body.classList.add('light-theme');
+            body.setAttribute('data-theme', 'light-theme');
+        }
+</script>
+</script>
+</body>
+</html>

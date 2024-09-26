@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Page</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://dishapatel010.github.io/T.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #fff;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s ease;
+            overflow-y: hidden;
+            margin-top: 0;
+            padding-top: 50px;
+        }
+
+        .heading::after {
+            content: "";
+            display: block;
+            width: 150px;
+            height: 2px;
+            background-color: #1db954;
+            margin: 10px auto;
+        }
+
+        .heading {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #1db954;
+        }
+
+        .button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .dark-theme {
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .sun-icon,
+        .moon-icon {
+            font-size: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .light-theme .sun-icon,
+        .dark-theme .moon-icon {
+            display: none;
+        }
+
+        .light-theme .moon-icon,
+        .dark-theme .sun-icon {
+            display: inline-block;
+        }
+
+        .form-container {
+            text-align: center;
+            padding: 20px;
+            background-color: transparent;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        label {
+            background-color: #1db954;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        label:hover {
+            background-color: #169749;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .selected-file {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .instructions {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+text-align: auto;
+overflow-y: auto
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="sun-icon">&#x1f31e;</span>
+        <span class="moon-icon">&#x1f319;</span>
+    </div>
+
+    <h1 class="heading">Tune Trends</h1>
+    <!-- Button to toggle instructions -->
+    <button class="button" id="toggle-instructions" onclick="toggleInstructions()">Toggle Instructions</button>
+    <!-- Instructions for Google Takeout -->
+    <div class="instructions" id="instructions">
+        <h2>Google Takeout Instructions</h2>
+        <p>Follow these steps to upload your YouTube watch history data:</p>
+        <ol>
+            <li>Go to Google Takeout: <a href="https://takeout.google.com" target="_blank">Google Takeout</a></li>
+            <li>Deselect All Products:
+                <ul>
+                    <li>Click on "Deselect All" at the top of the product list.</li>
+                </ul>
+            </li>
+            <li>Select Multiple Files:
+                <ul>
+                    <li>Scroll down to the "YouTube" section and select "YouTube" by clicking on it.</li>
+                    <li>Click on "All data included" to expand the selection.</li>
+                    <li>Deselect all items except "History."</li>
+                </ul>
+            </li>
+            <li>Click "Next" to continue and change the history file format from html to json</li>
+            <li>Click "Create export" to start the export process. Google will create a ZIP file with your data.</li>
+            <li>You will receive an email from Google Takeout with a download link.</li>
+            <li>Download the ZIP file from the email.</li>
+            <li>Unzip the downloaded ZIP file.</li>
+            <li>Find the "watch-history.json" file in the following location:
+                <ul>
+                    <li>Takeout > YouTube and YouTube Music > history > watch-history.json</li>
+                </ul>
+            </li>
+            <li>Upload the "watch-history.json" file using the form below:</li>
+        </ol>
+    </div>
+    <div class="form-container">
+        <h2>Upload a 'watch-history.json' File</h2>
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <label for="file">Choose a File</label>
+            <input type="file" name="file" id="file" accept=".json" required onchange="displayFileName()">
+            <div class="selected-file" id="selected-file">No file chosen</div>
+            <br><br>
+            <button class="button" type="submit">Upload and Process</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.querySelector('body');
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+
+            const theme = body.classList.contains('light-theme') ? 'light-theme' : 'dark-theme';
+            localStorage.setItem('theme', theme);
+
+            body.setAttribute('data-theme', theme);
+        }
+
+        const storedTheme = localStorage.getItem('theme');
+        const body = document.querySelector('body');
+
+        if (storedTheme) {
+            body.classList.add(storedTheme);
+            body.setAttribute('data-theme', storedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('dark-theme');
+            body.setAttribute('data-theme', 'dark-theme');
+        } else {
+            body.classList.add('light-theme');
+            body.setAttribute('data-theme', 'light-theme');
+        }
+
+        function displayFileName() {
+            const fileInput = document.getElementById("file");
+            const selectedFile = document.getElementById("selected-file");
+
+            if (fileInput.files.length > 0) {
+                selectedFile.innerText = `Selected File: ${fileInput.files[0].name}`;
+            } else {
+                selectedFile.innerText = "No file chosen";
+            }
+        }
+
+        function toggleInstructions() {
+            const instructions = document.getElementById("instructions");
+            instructions.style.display = instructions.style.display === "block" ? "none" : "block";
+        }
+    </script>
+</body>
+</html>

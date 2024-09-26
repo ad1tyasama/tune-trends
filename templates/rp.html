@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recently Played Tracks</title>
+<link rel="shortcut icon" type="image/x-icon" href="https://dishapatel010.github.io/T.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <style>
+  body {
+    margin: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+  }
+  
+          .navbar {
+                  padding-top: 30px; 
+                  padding-bottom: 30px; 
+                  height: 100px; 
+                  margin-bottom: 50px;
+              }
+              .navbar-brand .navbar-text {
+                  font-size: 40px; 
+                  font-weight: bold; 
+                  margin-left: 10px; 
+                  color: #1db954;
+              }
+
+              .dark-theme {
+            background-color: #1e1e1e;
+            color: white;
+        }
+.theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        background-color: transparent;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .sun-icon, .moon-icon {
+        font-size: 20px;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    .light-theme .sun-icon, .dark-theme .moon-icon {
+        display: none;
+    }
+
+    .light-theme .moon-icon, .dark-theme .sun-icon {
+        display: inline-block;
+    }
+
+    .h2 {
+      color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 10px;
+            margin-top: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+    }
+
+    .chart{
+      display: flex;
+      align-items: center;
+    }
+            </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand">
+            <span class="navbar-text">Tune Trends</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5000/dashboard">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5000/">Authorize</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About Us</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="sun-icon">&#x1f31e;</span>
+        <span class="moon-icon">&#x1f319;</span>
+    </div>
+</nav>
+    <center><h2>Time Analysis</h2></center>
+<div id="chart">{{ chart|safe }}</div>
+  <div id="graph">{{ graph|safe }}</div>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script>
+    function toggleTheme() {
+            const body = document.querySelector('body');
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+
+            // Store theme preference in local storage
+            const theme = body.classList.contains('light-theme') ? 'light-theme' : 'dark-theme';
+            localStorage.setItem('theme', theme);
+
+            // Set a data attribute on the body to track the current theme
+            body.setAttribute('data-theme', theme);
+        }
+
+        // Set initial theme based on stored value
+        const storedTheme = localStorage.getItem('theme');
+        const body = document.querySelector('body');
+
+        if (storedTheme) {
+            // If there is a stored theme in local storage, use that as the initial theme
+            body.classList.add(storedTheme);
+            body.setAttribute('data-theme', storedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // If no stored theme and user prefers dark mode, set dark theme as default
+            body.classList.add('dark-theme');
+            body.setAttribute('data-theme', 'dark-theme');
+        } else {
+            // Otherwise, set light theme as default
+            body.classList.add('light-theme');
+            body.setAttribute('data-theme', 'light-theme');
+        }
+  </script>
+</body>
+</html>
